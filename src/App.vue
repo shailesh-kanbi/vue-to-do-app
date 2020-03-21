@@ -1,22 +1,32 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <img src="./assets/logo.png">
-    <HelloWorld/>
+    <ToDoList></ToDoList>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld'
+import ToDoList from './components/ToDoList'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    ToDoList,
   }
 }
 </script>
 
+
 <style>
+*{
+  box-sizing :border-box;
+}
+.container{
+  max-width :600px;
+  margin : 0 auto;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

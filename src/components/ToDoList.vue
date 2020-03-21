@@ -5,10 +5,20 @@ class="todolist"
 placeholder="what needs to be done"
 v-model="newTodo"
 @keyup.enter="addToDo()">
-  <div v-for="todo in todos" :key="todo.id"
-        class="todo-item" v-model="newTodo" >
-  {{ todo.title }}
+  <div v-for="(todo,index) in todos" :key="todo.id"
+        class="todoitem" v-model="newTodo" >
+     <div>
+     <div v-if="!todo.editing" @dblclick="editTodo(todo)">
+      {{ todo.title }}
+      </div>
+      <input v-else type="text" v-model="todo.title" @blur="doneEdit(todo)" 
+      @keyup.enter="doneEdit(todo)" v-focus> 
+      </div>
+  <div class="remove-item" @click="removeToDo(index)">
+  &times;
   </div>
+  </div>
+  
   </div>
 </template>
 
@@ -18,24 +28,37 @@ export default {
   data () {
     return {
       newTodo: '',
+
       idForToDo: 3,
       todos :[
         {
           'id' : 1,
           'title' : 'Finish Vue',
           'completed' : false,
+          'editing' : false,
         },
         {
           'id' : 2,
           'title' : 'Finish Vue 2',
           'completed' : false,
+          'editing' : false,
         },
       ]
     } 
   },
+  directives :{
+    focus:{
+      inserted: function(e1){
+        e1.focus()
+      }
+    }
+  },
   methods : {
     addToDo()
     {
+        if(this.newTodo.trim().length ==0){
+          return
+        }
         this.todos.push({
           id: this.idForToDo,
           title:this.newTodo,
@@ -43,6 +66,16 @@ export default {
         })
         this.newTodo =''
         this.idForToDo++
+    },
+    editTodo(todo){
+      todo.editing = true
+    },
+    doneEdit(todo){
+      todo.editing = false
+    },
+    removeToDo(index)
+    {
+      this.todos.splice(index,1);
     }
   }
 }
@@ -52,5 +85,16 @@ export default {
 <style>
 .todolist{
   width:100%;
+}
+.todoitem{
+  display : flex;
+  align-items : center;
+  justify-content: space-between;
+  font-weight:bold;
+  margin: 20px auto;
+  
+}
+.remove-item{
+  cursor: pointer;
 }
 </style>
